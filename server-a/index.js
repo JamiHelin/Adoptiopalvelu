@@ -14,7 +14,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// GET /animals
+// GET /animals = hakee kaikki eläimet
 app.get('/animals', (req, res) => {
   db.all('SELECT * FROM animals', (err, rows) => {
     if (err) {
@@ -25,7 +25,7 @@ app.get('/animals', (req, res) => {
   });
 });
 
-// GET /animals/:id
+// GET /animals/:id = hakee id:n mukaan
 app.get('/animals/:id', (req, res) => {
   const id = req.params.id;
 
@@ -57,11 +57,11 @@ app.post('/animals/:id/adopt', (req, res) => {
       console.error('Virhe haettaessa eläintä adoptioon:', err);
       return res.status(500).json({ error: 'Tietokantavirhe' });
     }
-
+    //jos ei löydy
     if (!animal) {
       return res.status(404).json({ error: 'Eläintä ei löytynyt' });
     }
-
+    // jos on jo adoptoitu = status = reserved
     if (animal.status !== 'available') {
       return res.status(400).json({ error: 'Eläin ei ole enää adoptoitavissa' });
     }
