@@ -39,7 +39,7 @@ function initDb() {
           3,
           'Eurooppalainen lyhytkarva',
           'Rauhallinen sohvaperuna, tykkää rapsutuksista.',
-          'https://example.com/cat1.jpg',
+          'https://cdn.pixabay.com/photo/2024/10/16/16/14/cat-9125207_1280.jpg',
           'available'
         );
 
@@ -49,7 +49,7 @@ function initDb() {
           5,
           'Sekarotu',
           'Energinen lenkkikaveri, tulee hyvin toimeen lasten kanssa.',
-          'https://example.com/dog1.jpg',
+          'https://cdn.pixabay.com/photo/2020/04/12/14/41/labrador-retriever-5034443_1280.jpg',
           'available'
         );
 
@@ -59,7 +59,7 @@ function initDb() {
           2,
           'Maatiainen',
           'Utelias ja ihmisrakas nuori kissa, jota kiinnostaa kaikki uudet lelut ja äänet.',
-          'https://example.com/cat2.jpg',
+          'https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg',
           'available'
         );
 
@@ -69,7 +69,7 @@ function initDb() {
           7,
           'Labradorinnoutaja',
           'Kiltti ja lempeä seniori, joka rakastaa rauhallisia kävelyjä ja herkkuja.',
-          'https://example.com/dog2.jpg',
+          'https://cdn.pixabay.com/photo/2016/02/19/15/46/labrador-retriever-1210559_1280.jpg',
           'available'
         );
 
@@ -79,7 +79,7 @@ function initDb() {
           1,
           'Leijonaharjas',
           'Energinen ja leikkisä kani, joka tarvitsee paljon tilaa pomppimiseen.',
-          'https://example.com/rabbit1.jpg',
+          'https://cdn.pixabay.com/photo/2025/05/16/14/54/eastern-cottontail-9604011_1280.jpg',
           'available'
         );
 
@@ -89,7 +89,7 @@ function initDb() {
           4,
           'Norjalainen metsäkissa sekoitus',
           'Pehmeäkarvainen ja rauhallinen seurakissa. Tulee toimeen myös muiden kissojen kanssa.',
-          'https://example.com/cat3.jpg',
+          'https://cdn.pixabay.com/photo/2024/01/29/20/40/cat-8540772_1280.jpg',
           'available'
         );
 

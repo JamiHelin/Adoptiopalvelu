@@ -45,7 +45,7 @@ app.get('/animals/:id', (req, res) => {
 
 /////////////////////////////
 // POST /animals/:id/adopt
-// (tällä hetkellä STUBI,
+// (tällä hetkellä KESKEN,
 // myöhemmin tämä kutsuu Server B:tä)
 /////////////////////////////
 app.post('/animals/:id/adopt', (req, res) => {
@@ -67,7 +67,7 @@ app.post('/animals/:id/adopt', (req, res) => {
     }
 
     // 2. Tässä kohdassa myöhemmin: kutsu Server B:tä
-    // Nyt vain päivitetään status "reserved", jotta frontend voi testata.
+    // Nyt vain päivitetään status "reserved", jotta frontend voi testata. POST http://localhost:3000/animals/1/adopt muuttaa eläimen statuksen -> reserved
     db.run(
       'UPDATE animals SET status = ? WHERE id = ?',
       ['reserved', id],
@@ -77,6 +77,7 @@ app.post('/animals/:id/adopt', (req, res) => {
           return res.status(500).json({ error: 'Tietokantavirhe' });
         }
 
+        // tämä vain testausta varten, poistuu kun server B lisätään
         res.json({
           message: 'Adoptiohakemus vastaanotettu (stub-versio, ilman Server B:tä)',
           animalId: id,
