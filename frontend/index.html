@@ -1,27 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fi">
 <head>
-    <meta charset="UTF-8">
-    <title>Adoptiopalvelu</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Vaasan Eläinsuoja - Adoptiot</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Adoptiopalvelu</h1>
-        <nav>
-            <a href="index.html">Etusivu</a>
-            <a href="animal.html">Eläimet</a>
-        </nav>
-    </header>
+  <header class="site-header">
+    <h1>Vaasan Eläinsuoja — Adoptoitavat eläimet</h1>
+  </header>
 
-    <section class="hero">
-        <h2>Löydä uusi ystävä</h2>
-        <p>Tutustu eläimiin ja adoptoi!</p>
-        <a class="cta" href="animal.html">Näytä eläimet</a>
-    </section>
+  <main class="container">
+    <section id="animals-grid" class="grid"></section>
+  </main>
 
-    <footer>
-        <p>Adoptiopalvelu © 2025</p>
-    </footer>
+  <script src="main.js"></script>
+  <script>
+    // Ladataan lista heti
+    window.appInit && window.appInit();
+  </script>
 </body>
 </html>
