@@ -1,13 +1,11 @@
-const API_BASE = "http://localhost:3000"; // Muuta tarvittaessa
+const API_BASE = "http://localhost:3000";
 
-// ======= HELPER: Fetch JSON =======
 async function apiFetch(path, options) {
   const res = await fetch(API_BASE + path, options);
   if (!res.ok) throw res;
   return res.json();
 }
 
-// ======= INDEX PAGE =======
 window.appInit = async function() {
   const grid = document.getElementById('animals-grid');
   grid.textContent = 'Ladataan eläimiä...';
@@ -37,7 +35,6 @@ window.appInit = async function() {
   }
 };
 
-// ======= ANIMAL PAGE =======
 window.showAnimalPage = async function() {
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
@@ -52,43 +49,57 @@ window.showAnimalPage = async function() {
     document.getElementById('animal-name').textContent = a.name;
     const img = a.image_url || 'assets/placeholder.png';
 
-    card.innerHTML = `
+    let content = `
       <img src="${img}" alt="${escapeHtml(a.name)}">
       <h2>${escapeHtml(a.name)}</h2>
       <p><strong>Tyyppi:</strong> ${escapeHtml(a.type)} • <strong>Ikä:</strong> ${escapeHtml(a.age)}</p>
       <p><strong>Rotu:</strong> ${escapeHtml(a.breed || '-')}</p>
       <p>${escapeHtml(a.description || '')}</p>
-
-      <div class="form-row">
-        <h3>Jätä adoptiohakemus</h3>
-        <input id="applicant-name" placeholder="Nimesi (pakollinen)">
-        <input id="applicant-email" placeholder="Sähköpostisi (pakollinen)">
-        <textarea id="applicant-message" placeholder="Viesti / lisätiedot"></textarea>
-        <button id="adopt-btn" class="button">Adoptoi minut</button>
-      </div>
     `;
 
-    const btn = document.getElementById('adopt-btn');
-    btn.addEventListener('click', async () => {
-      const name = document.getElementById('applicant-name').value.trim();
-      const email = document.getElementById('applicant-email').value.trim();
-      const message = document.getElementById('applicant-message').value.trim();
-      if (!name || !email) { alert('Täytä nimi ja sähköposti.'); return; }
+    if (a.status !== "available") {
+      content += `
+        <p style="color:red; font-weight:bold; margin-top:20px;">
+          Tämä eläin on jo varattu eikä sitä voi adoptoida.
+        </p>
+      `;
+    } else {
+      content += `
+        <div class="form-row">
+          <h3>Jätä adoptiohakemus</h3>
+          <input id="applicant-name" placeholder="Nimesi (pakollinen)">
+          <input id="applicant-email" placeholder="Sähköpostisi (pakollinen)">
+          <textarea id="applicant-message" placeholder="Viesti / lisätiedot"></textarea>
+          <button id="adopt-btn" class="button">Adoptoi minut</button>
+        </div>
+      `;
+    }
 
-      btn.disabled = true;
-      try {
-        await apiFetch(`/animals/${encodeURIComponent(id)}/adopt`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ applicant_name: name, email, message })
-        });
-        location.href = 'thanks.html';
-      } catch(e) {
-        btn.disabled = false;
-        alert('Virhe lähetettäessä hakemusta. Tarkista backend.');
-        console.error(e);
-      }
-    });
+    card.innerHTML = content;
+
+    if (a.status === "available") {
+      const btn = document.getElementById('adopt-btn');
+      btn.addEventListener('click', async () => {
+        const name = document.getElementById('applicant-name').value.trim();
+        const email = document.getElementById('applicant-email').value.trim();
+        const message = document.getElementById('applicant-message').value.trim();
+        if (!name || !email) { alert('Täytä nimi ja sähköposti.'); return; }
+
+        btn.disabled = true;
+        try {
+          await apiFetch(`/animals/${encodeURIComponent(id)}/adopt`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ applicant_name: name, email, message })
+          });
+          location.href = 'thanks.html';
+        } catch(e) {
+          btn.disabled = false;
+          alert('Virhe lähetettäessä hakemusta. Tarkista backend.');
+          console.error(e);
+        }
+      });
+    }
 
   } catch(err) {
     card.innerHTML = '<p>Eläintietoa ei voitu ladata.</p>';
@@ -96,7 +107,6 @@ window.showAnimalPage = async function() {
   }
 };
 
-// ======= HELPER: Escape HTML =======
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)

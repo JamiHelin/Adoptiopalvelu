@@ -35,7 +35,7 @@ function initDb() {
 
         stmt.run(
           'Misu',
-          'kissa',
+          'Kissa',
           3,
           'Eurooppalainen lyhytkarva',
           'Rauhallinen sohvaperuna, tykkää rapsutuksista.',
@@ -45,7 +45,7 @@ function initDb() {
 
         stmt.run(
           'Rex',
-          'koira',
+          'Koira',
           5,
           'Sekarotu',
           'Energinen lenkkikaveri, tulee hyvin toimeen lasten kanssa.',
@@ -55,7 +55,7 @@ function initDb() {
 
         stmt.run(
           'Lumi',
-          'kissa',
+          'Kissa',
           2,
           'Maatiainen',
           'Utelias ja ihmisrakas nuori kissa, jota kiinnostaa kaikki uudet lelut ja äänet.',
@@ -65,7 +65,7 @@ function initDb() {
 
         stmt.run(
           'Bella',
-          'koira',
+          'Koira',
           7,
           'Labradorinnoutaja',
           'Kiltti ja lempeä seniori, joka rakastaa rauhallisia kävelyjä ja herkkuja.',
@@ -75,7 +75,7 @@ function initDb() {
 
         stmt.run(
           'Pöpö',
-          'kani',
+          'Kani',
           1,
           'Leijonaharjas',
           'Energinen ja leikkisä kani, joka tarvitsee paljon tilaa pomppimiseen.',
@@ -85,7 +85,7 @@ function initDb() {
 
         stmt.run(
           'Sulo',
-          'kissa',
+          'Kissa',
           4,
           'Norjalainen metsäkissa sekoitus',
           'Pehmeäkarvainen ja rauhallinen seurakissa. Tulee toimeen myös muiden kissojen kanssa.',
