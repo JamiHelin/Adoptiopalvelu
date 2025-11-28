@@ -1,0 +1,4 @@
+node_modules/
+package-lock.json
+server-b/adoptions.db
+server-a/animals.db
