@@ -22,7 +22,7 @@ window.appInit = async function() {
         <img src="${img}" alt="${escapeHtml(a.name)}">
         <div class="meta">
           <h3>${escapeHtml(a.name)}</h3>
-          <p>${escapeHtml(a.type)} • ${escapeHtml(a.age)}</p>
+          <p>${escapeHtml(a.type)} • ${escapeHtml(a.age)}v</p>
           <a class="button" href="animal.html?id=${encodeURIComponent(a.id)}">Katso lisää</a>
         </div>
       `;
@@ -52,7 +52,7 @@ window.showAnimalPage = async function() {
     let content = `
       <img src="${img}" alt="${escapeHtml(a.name)}">
       <h2>${escapeHtml(a.name)}</h2>
-      <p><strong>Tyyppi:</strong> ${escapeHtml(a.type)} • <strong>Ikä:</strong> ${escapeHtml(a.age)}</p>
+      <p><strong>Tyyppi:</strong> ${escapeHtml(a.type)} • <strong>Ikä:</strong> ${escapeHtml(a.age)}-vuotias</p>
       <p><strong>Rotu:</strong> ${escapeHtml(a.breed || '-')}</p>
       <p>${escapeHtml(a.description || '')}</p>
     `;
