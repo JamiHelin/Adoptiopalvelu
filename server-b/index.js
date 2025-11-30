@@ -18,6 +18,13 @@ app.get('/health', (req, res) => {
   res.json({ status: 'server-b ok' });
 });
 
+app.get('/adoptions', (req, res) => {
+  db.all('SELECT * FROM adoptions', (err, rows) => {
+    if (err) return res.status(500).json({ error: 'DB-virhe' });
+    res.json(rows);
+  });
+});
+
 app.post('/adoptions', (req, res) => {
   const { animal_id, applicant_name, email, message } = req.body;
 
