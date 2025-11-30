@@ -2,6 +2,28 @@ const express = require('express');
 const path = require('path');
 const { db, initDb } = require('./database');
 
+function getAnimalById(id) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM animals WHERE id = ?', [id], (err, row) => {
+      if (err) return reject(err);
+      resolve(row);
+    });
+  });
+}
+
+function updateAnimalStatus(id, status) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'UPDATE animals SET status = ? WHERE id = ?',
+      [status, id],
+      function (err) {
+        if (err) return reject(err);
+        resolve();
+      }
+    );
+  });
+}
+
 const app = express();
 const PORT = 3000;
 
@@ -33,69 +55,73 @@ app.get('/animals/:id', (req, res) => {
   });
 });
 
-app.post('/animals/:id/adopt', (req, res) => {
+app.post('/animals/:id/adopt', async (req, res) => {
   const id = req.params.id;
-  const { applicant_name, email, message } = req.body;
+  const { applicant_name, email, message } = req.body || {};
 
+  // 1. Perusvalidaatio
   if (!applicant_name || !email) {
-    return res.status(400).json({ error: 'Nimi ja sähköposti ovat pakollisia.' });
+    return res.status(400).json({
+      error: 'Hakijan nimi (applicant_name) ja email ovat pakollisia.'
+    });
   }
 
-  db.get('SELECT * FROM animals WHERE id = ?', [id], (err, animal) => {
-    if (err) {
-      console.error('Virhe haettaessa eläintä:', err);
-      return res.status(500).json({ error: 'Tietokantavirhe' });
-    }
+  try {
+    // 2. Haetaan eläin tietokannasta
+    const animal = await getAnimalById(id);
+
     if (!animal) {
       return res.status(404).json({ error: 'Eläintä ei löytynyt' });
     }
+
     if (animal.status !== 'available') {
       return res.status(400).json({ error: 'Eläin ei ole enää adoptoitavissa' });
     }
 
-    fetch('http://localhost:3002/adoptions', {
+    // 3. Lähetetään adoptiohakemus Server B:lle
+    const serverBUrl = 'http://localhost:3002/adoptions';
+
+    const response = await fetch(serverBUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         animal_id: Number(id),
         applicant_name,
         email,
-        message
+        message: message || ''
       })
-    })
-      .then(async (response) => {
-        const data = await response.json().catch(() => null);
+    });
 
-        if (!response.ok) {
-          console.error('Virhe Server B:ltä:', data);
-          return res.status(response.status).json(
-            data || { error: 'Adoptiopalvelin palautti virheen.' }
-          );
-        }
+    // Jos Server B palauttaa virheen → välitetään se eteenpäin
+    if (!response.ok) {
+      let errorBody = {};
+      try {
+        errorBody = await response.json();
+      } catch (e) {
+        // ei JSONia, ignoroidaan
+      }
 
-        db.run(
-          'UPDATE animals SET status = ? WHERE id = ?',
-          ['reserved', id],
-          function (updateErr) {
-            if (updateErr) {
-              console.error('Virhe päivitettäessä eläimen statusta:', updateErr);
-              return res.status(500).json({ error: 'Tietokantavirhe statusta päivittäessä' });
-            }
-
-            return res.status(201).json({
-              message: 'Adoptiohakemus vastaanotettu ja tallennettu.',
-              animalId: id,
-              newStatus: 'reserved',
-              adoption: data 
-            });
-          }
-        );
-      })
-      .catch((error) => {
-        console.error('Virhe kutsuttaessa Server B:tä:', error);
-        return res.status(502).json({ error: 'Adoptiopalvelimeen ei saada yhteyttä.' });
+      return res.status(response.status).json({
+        error: errorBody.error || 'Virhe adoptiohakemuksessa (Server B)'
       });
-  });
+    }
+
+    const adoption = await response.json();
+
+    // 4. Päivitetään eläimen status paikalliseen animals-tauluun
+    await updateAnimalStatus(id, 'reserved');
+
+    // 5. Vahvistus frontendille
+    return res.status(201).json({
+      message: 'Adoptiohakemus vastaanotettu ja tallennettu.',
+      animalId: id,
+      newStatus: 'reserved',
+      adoption
+    });
+  } catch (err) {
+    console.error('Virhe adoptiohakemuksessa:', err);
+    return res.status(500).json({ error: 'Palvelinvirhe adoptiossa' });
+  }
 });
 
 
