@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const fetch = require('node-fetch');
 const { db, initDb } = require('./database');
 
 function getAnimalById(id) {
@@ -80,7 +79,7 @@ app.post('/animals/:id/adopt', async (req, res) => {
     }
 
     // 3. Lähetetään adoptiohakemus Server B:lle
-    const serverBUrl = 'http://localhost:3002/adoptions';
+    const serverBUrl = 'http://server-b:3002/adoptions';
 
     const response = await fetch(serverBUrl, {
       method: 'POST',

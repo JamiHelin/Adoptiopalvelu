@@ -5,7 +5,9 @@ WORKDIR /usr/src/app/server-b
 COPY server-b/package*.json ./
 RUN npm install
 
-COPY server-b ./
+# Kopioidaan vain JS-tiedostot
+COPY server-b/index.js ./index.js
+COPY server-b/database.js ./database.js
 
 EXPOSE 3002
 

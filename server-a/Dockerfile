@@ -1,20 +1,18 @@
 FROM node:20
 
-# Työhakemisto kontissa
 WORKDIR /usr/src/app/server-a
 
-# Kopioidaan vain server-a:n package-tiedostot ja asennetaan riippuvuudet
+# Asennetaan riippuvuudet
 COPY server-a/package*.json ./
 RUN npm install
 
-# Kopioidaan server-a:n koodi
-COPY server-a ./
+# Kopioidaan vain JS-tiedostot, EI node_modules
+COPY server-a/index.js ./index.js
+COPY server-a/database.js ./database.js
 
 # Kopioidaan frontend-kansio konttiin viereen (../frontend)
 COPY frontend ../frontend
 
-# Palvelin kuuntelee porttia 3000
 EXPOSE 3000
 
-# Ajetaan suoraan tuotantotilassa (ei nodemonia)
 CMD ["node", "index.js"]
