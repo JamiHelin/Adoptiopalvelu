@@ -125,5 +125,4 @@ app.post('/animals/:id/adopt', async (req, res) => {
   }
 });
 
-
 app.listen(PORT, () => console.log(`Server A running on http://localhost:${PORT}`));
