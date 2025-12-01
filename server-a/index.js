@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health', (req, res) => res.json({ status: 'server-a ok' }));
 
 app.get('/animals', (req, res) => {
   db.all('SELECT * FROM animals', (err, rows) => {
